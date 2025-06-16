@@ -103,10 +103,10 @@ void startAccessPoint() {
   Serial.print("AP IP address: ");
   Serial.println(IP);
 
-  if (!MDNS.begin("grillzilla")) {
+  if (!MDNS.begin("grillzilla.local")) {
     Serial.println("Error starting mDNS responder!");
   } else {
-    Serial.println("mDNS responder started: http://grillzilla");
+    Serial.println("mDNS responder started: http://grillzilla.local");
   }
 
   server.on("/", handleRoot);
@@ -125,6 +125,12 @@ void startAccessPoint() {
     } else {
       server.send(400, "text/plain", "Missing ssid or pass.");
     }
+  });
+
+  server.on("/api/reboot", HTTP_POST, []() {
+    server.send(200, "text/plain", "Rebooting in 3 seconds...");
+    delay(3000);  // give browser time to receive response
+    ESP.restart();
   });
 
   server.begin();
@@ -172,8 +178,8 @@ void handleRoot() {
     <body>
       <h1>Grillzilla</h1>
       <h4>Temperature Readings</h4>
-      <p>Ambient: <span id="ambient">--</span> °C</p>
-      <p>Object: <span id="object">--</span> °C</p>
+      <p>Ambient: <span id="ambient">--</span>°C</p>
+      <p>Object: <span id="object">--</span>°C</p>
       <hr>
       <h4>Wi-Fi Settings</h4>
       <form onsubmit="saveConfig(event)">
@@ -181,6 +187,16 @@ void handleRoot() {
         <label>Password: <input type="password" id="pass" value=")rawliteral" + savedPass + R"rawliteral(" /></label><br/>
         <button type="submit">Save Settings</button>
       </form>
+      <hr>
+      <h4>Maintenance</h4>
+      <button onclick="reboot()">Reboot</button>
+      <script>
+        async function reboot() {
+          const res = await fetch('/api/reboot', { method: 'POST' });
+          const text = await res.text();
+          alert(text);
+        }
+      </script>      
     </body>
     </html>
   )rawliteral";
