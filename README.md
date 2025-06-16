@@ -1,11 +1,4 @@
-
-<div style="display:flex; font-size:50px; height:96px; gap:10px; font-weight:800;">
-
- ![./images/logo_small.png](./images/logo_small.png) 
-
- <div>Grillzilla</div>
-</div>
-
+![./images/logo_small.png](./images/logo_small.png) 
 
 # Grillzilla  
 
