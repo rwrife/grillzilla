@@ -1,6 +1,6 @@
 ![./images/logo_small.png](./images/logo_small.png) 
 
-# Grillzilla  
+# Project Grillzilla  
 
 ## Extenal gas grill temperature monitor
 
